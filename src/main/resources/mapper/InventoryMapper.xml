@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wit.dao.InventoryMapper">
+  <resultMap id="BaseResultMap" type="com.wit.pojo.Inventory">
+    <id column="goodsId" jdbcType="INTEGER" property="goodsid" />
+    <result column="goodsAmount" jdbcType="INTEGER" property="goodsamount" />
+    <association property="goods" javaType="com.wit.pojo.Goods" resultMap="GoodsMap"/>
+  </resultMap>
+  <resultMap id="GoodsMap" type="com.wit.pojo.Goods">
+    <id column="goodsId" jdbcType="INTEGER" property="goodsid" />
+    <result column="goodsName" jdbcType="VARCHAR" property="goodsname" />
+    <result column="goodsPrice" jdbcType="DECIMAL" property="goodsprice" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    goodsId, goodsAmount
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from inventory
+    where goodsId = #{goodsid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllInventories" resultMap="BaseResultMap">
+    SELECT * FROM `inventory` i ,`goods` g WHERE i.`goodsId`=g.`goodsId`
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from inventory
+    where goodsId = #{goodsid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wit.pojo.Inventory">
+    insert into inventory (goodsId, goodsAmount)
+    values (#{goodsid,jdbcType=INTEGER}, #{goodsamount,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wit.pojo.Inventory">
+    insert into inventory
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="goodsid != null">
+        goodsId,
+      </if>
+      <if test="goodsamount != null">
+        goodsAmount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="goodsid != null">
+        #{goodsid,jdbcType=INTEGER},
+      </if>
+      <if test="goodsamount != null">
+        #{goodsamount,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wit.pojo.Inventory">
+    update inventory
+    <set>
+      <if test="goodsamount != null">
+        goodsAmount = #{goodsamount,jdbcType=INTEGER},
+      </if>
+    </set>
+    where goodsId = #{goodsid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wit.pojo.Inventory">
+    update inventory
+    set goodsAmount = #{goodsamount,jdbcType=INTEGER}
+    where goodsId = #{goodsid,jdbcType=INTEGER}
+  </update>
+</mapper>

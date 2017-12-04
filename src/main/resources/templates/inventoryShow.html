@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>库存页面</title>
+    <style>
+        .pagination li{
+            float:left;
+            list-style: none;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>商品库存</h1>
+<table>
+    <tr>
+        <td>商品id</td>
+        <td>商品名称</td>
+        <td>商品价格</td>
+        <td>商品数量</td>
+    </tr>
+    <tr th:each="inventory,iterStat : ${inventories}">
+        <td th:text="${inventory.goodsid}"></td>
+        <td th:text="${inventory.goods.goodsname}"></td>
+        <td th:text="${inventory.goods.goodsprice}"></td>
+        <td th:text="${inventory.goodsamount}"></td>
+    </tr>
+</table>
+<nav>
+    <ul class="pagination">
+        <li><a href="">&laquo;</a></li>
+
+        <li>
+            <a th:if="${not isFirstPage}" th:href="@{${'/ops/showAllInventories'}(pageNum=${pageNum-1},pageSize=${pageSize})}">Previous</a>
+            <a th:if="${isFirstPagee}" href="javascript:void(0);">Previous</a>
+        </li>
+
+        <li th:each="pageNo : ${#numbers.sequence(1, totalPages)}">
+            <a th:if="${pageNum eq pageNo}" href="javascript:void(0);">
+                <span th:text="${pageNo}"></span>
+            </a>
+
+            <a th:if="${not (pageNum eq pageNo)}" th:href="@{${'/ops/showAllInventories'}(pageNum=${pageNo},size=${pageSize})}">
+                <span th:text="${pageNo}"></span>
+            </a>
+        </li>
+        <li>
+            <a th:if="${not isLastPage}" th:href="@{${'/ops/showAllLog'}(pageNum=${pageNum+1},size=${pageSize})}">Next</a>
+            <a th:if="${isLastPage}" href="javascript:void(0);">Next</a>
+        </li>
+
+        <li><a href="#">&raquo;</a></li>
+    </ul>
+</nav>
+</body>
+</html>
